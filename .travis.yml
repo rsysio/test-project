@@ -1,5 +1,5 @@
 
-sudo: false
+sudo: required
 language: scala
 scala:
 - 2.11.8
@@ -8,3 +8,15 @@ jdk:
 cache:
   directories:
     - '$HOME/.ivy2/cache'
+
+services:
+  - docker
+
+after_success:
+  - docker --version
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - eval $(aws ecr get-login --region us-west-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - docker build -t my_example_app .
+  - docker tag my_example_app:latest 248196168117.dkr.ecr.us-west-2.amazonaws.com/test-project:latest
+  - docker push 248196168117.dkr.ecr.us-west-2.amazonaws.com/test-project:latest
