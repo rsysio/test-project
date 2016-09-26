@@ -1,4 +1,4 @@
-name := "azure-test-project"
+name := "test-project"
 
 version := "0.0.1-SNAPSHOT"
 
