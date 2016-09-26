@@ -1,0 +1,3 @@
+GET         /                    controllers.Application.testPage()
+
+GET         /assets/*file        controllers.Assets.at(path="/public", file)
