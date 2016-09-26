@@ -16,7 +16,7 @@ after_success:
   - docker --version
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
-  - eval $(aws ecr get-login --region us-west-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvar
+  - eval $(aws ecr get-login --region us-west-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envva
   - docker build -t test-project .
   - docker tag test-project:latest 248196168117.dkr.ecr.us-west-2.amazonaws.com/test-project:latest
   - docker push 248196168117.dkr.ecr.us-west-2.amazonaws.com/test-project:latest
