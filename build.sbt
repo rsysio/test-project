@@ -16,6 +16,6 @@ libraryDependencies ++= Seq(
 
 maintainer:= "Stuart Mcvean"
 
-dockerExposedPorts in Docker := Seq(9000, 9443)
+dockerExposedPorts in Docker := Seq(9000)
 
 routesGenerator := InjectedRoutesGenerator
