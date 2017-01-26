@@ -1,0 +1,16 @@
+steps:
+    - label: ':hammer: Build & Publish'
+      command: >
+          docker build -t test-project . \
+          && docker tag test-project:latest ${ECR_REPO}/${DOCKER_IMAGE}:latest \
+          && eval $(aws --region eu-west-2 ecr get-login) \
+          && docker push ${ECR_REPO}/${DOCKER_IMAGE}:latest
+
+    - wait
+
+    - lable: 'Publish'
+      command: >
+          aws ecs --region eu-west-2 list-clusters
+
+
+
