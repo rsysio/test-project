@@ -8,7 +8,7 @@ steps:
 
     - wait
 
-    - lable: 'Publish'
+    - label: 'Publish'
       command: >
           aws ecs --region eu-west-2 list-clusters
 
