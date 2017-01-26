@@ -11,8 +11,7 @@ steps:
     - wait
 
     - label: 'Publish'
-      command: >
-          aws ecs --region eu-west-2 list-clusters
+      command: docker push ${ECR_REPO}:latest
 
 
 
