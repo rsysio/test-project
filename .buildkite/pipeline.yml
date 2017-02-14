@@ -1,17 +1,24 @@
 steps:
-    - label: ':hammer: Build & Publish'
+
+    - label: 'Create AWS ECR repo'
       command: >
-          docker run -it --rm -v ${PWD}:/app 1science/sbt sbt docker:stage
-          && cd target/docker/stage
-          && docker build -t test-project .
-          && docker tag test-project:latest ${ECR_REPO}:latest
-          && eval $(aws --region eu-west-2 ecr get-login)
-          && docker push ${ECR_REPO}:latest
+          make create-ecr
+          # get erc repo uri
+          DOCKER_REPO=$(aws ecr describe-repositories \
+            --repository-names ${BUILDKITE_PIPELINE_SLUG} \
+            --query 'repositories[0].repositoryUri')
+          buildkite-agent meta-data set DOCKER_REPO ${DOCKER_REPO}
 
     - wait
 
-    - label: 'Publish'
-      command: docker push ${ECR_REPO}:latest
-
+    - label: ':hammer: Build & Publish'
+      command: >
+          # docker login
+          eval $(aws --region eu-west-2 ecr get-login)
+          make docker-build
+          DOCKER_REPO=$(buildkite-agent meta-data get "DOCKER_REPO")
+          DOCKER_TAG=latest make docker-push
+          DOCKER_TAG=${BUILDKITE_BUILD_NUMBER} make docker-push
+          DOCKER_TAG=${BUILDKITE_COMMIT} make docker-push
 
 
