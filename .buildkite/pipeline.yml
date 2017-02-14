@@ -3,7 +3,7 @@ steps:
     - label: 'Create AWS ECR repo'
       agents:
         queue: default
-      command: >
+      command: |
           make create-ecr
           # get erc repo uri
           DOCKER_REPO=$(aws ecr describe-repositories --repository-names ${BUILDKITE_PIPELINE_SLUG} --query 'repositories[0].repositoryUri')
@@ -14,7 +14,7 @@ steps:
     - label: ':hammer: Build & Publish'
       agents:
         queue: default
-      command: >
+      command: |
           # docker login
           eval $(aws --region eu-west-2 ecr get-login)
           make docker-build
