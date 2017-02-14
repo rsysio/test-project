@@ -10,15 +10,12 @@ create-ecr:
 
 .PHONY: docker-build
 docker-build:
-	# run sbt
 	docker run -it --rm -v ${PWD}:/app 1science/sbt sbt docker:stage
 	cd target/docker/stage
-	# build docker with local name
 	docker build -t ${PROJECT_NAME} .
 
 .PHONY: docker-push
 docker-push:
-	# tag and push to docker repo
 	docker tag ${PROJECT_NAME}:latest ${DOCKER_REPO}:${DOCKER_TAG}
 	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
