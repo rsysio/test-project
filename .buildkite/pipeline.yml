@@ -19,8 +19,8 @@ steps:
           eval $(aws --region eu-west-2 ecr get-login)
           make docker-build
           DOCKER_REPO=$(buildkite-agent meta-data get "DOCKER_REPO")
-          DOCKER_TAG=latest make docker-push
-          DOCKER_TAG=${BUILDKITE_BUILD_NUMBER} make docker-push
-          DOCKER_TAG=${BUILDKITE_COMMIT} make docker-push
+          DOCKER_TAG=latest; make docker-push
+          DOCKER_TAG=${BUILDKITE_BUILD_NUMBER}; make docker-push
+          DOCKER_TAG=${BUILDKITE_COMMIT}; make docker-push
 
 
