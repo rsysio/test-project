@@ -16,7 +16,6 @@ steps:
       agents:
         queue: default
       command: |
-          eval $(aws --region eu-west-2 ecr get-login)
           make docker-build
           export DOCKER_REPO=$(buildkite-agent meta-data get "DOCKER_REPO")
           # push latest

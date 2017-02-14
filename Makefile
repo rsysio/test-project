@@ -1,12 +1,13 @@
 SHELL := /bin/bash
 PROJECT_NAME ?= test-project
+AWS_REGION ?= eu-west-2
 GIT_HASH ?= $(shell git rev-parse HEAD)
 GIT_BRANCH ?= $(git rev-parse --abbrev-ref HEAD)
 
 .PHONY: create-ecr
 create-ecr:
-	aws ecr describe-repositories --repository-names ${PROJECT_NAME} || \
-		aws ecr create-repository --repository-name ${PROJECT_NAME}
+	aws --region ${AWS_REGION} ecr describe-repositories --repository-names ${PROJECT_NAME} || \
+		aws --region ${AWS_REGION} ecr create-repository --repository-name ${PROJECT_NAME}
 
 .PHONY: docker-build
 docker-build:
@@ -16,5 +17,6 @@ docker-build:
 .PHONY: docker-push
 docker-push:
 	docker tag ${PROJECT_NAME}:latest ${DOCKER_REPO}:${DOCKER_TAG}
+	eval(aws --region ${AWS_REGION} ecr get-login) && \
 	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
