@@ -17,6 +17,5 @@ docker-build:
 .PHONY: docker-push
 docker-push:
 	docker tag ${PROJECT_NAME}:latest ${DOCKER_REPO}:${DOCKER_TAG}
-	eval(aws --region ${AWS_REGION} ecr get-login) && \
 	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
