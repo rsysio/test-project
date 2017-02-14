@@ -11,10 +11,7 @@ create-ecr:
 .PHONY: docker-build
 docker-build:
 	docker run -it --rm -v ${PWD}:/app 1science/sbt sbt docker:stage
-	cd target/docker/stage
-	ls
-	cat Dockerfile
-	docker build -t ${PROJECT_NAME} .
+	cd target/docker/stage && docker build -t ${PROJECT_NAME} .
 
 .PHONY: docker-push
 docker-push:
