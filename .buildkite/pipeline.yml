@@ -6,9 +6,7 @@ steps:
       command: >
           make create-ecr
           # get erc repo uri
-          DOCKER_REPO=$(aws ecr describe-repositories \
-            --repository-names ${BUILDKITE_PIPELINE_SLUG} \
-            --query 'repositories[0].repositoryUri')
+          DOCKER_REPO=$(aws ecr describe-repositories --repository-names ${BUILDKITE_PIPELINE_SLUG} --query 'repositories[0].repositoryUri')
           buildkite-agent meta-data set DOCKER_REPO ${DOCKER_REPO}
 
     - wait
