@@ -1,7 +1,8 @@
 steps:
 
     - label: 'Create AWS ECR repo'
-      queue: default
+      agents:
+        queue: default
       command: >
           make create-ecr
           # get erc repo uri
@@ -13,7 +14,8 @@ steps:
     - wait
 
     - label: ':hammer: Build & Publish'
-      queue: default
+      agents:
+        queue: default
       command: >
           # docker login
           eval $(aws --region eu-west-2 ecr get-login)
