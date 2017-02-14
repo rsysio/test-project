@@ -5,7 +5,8 @@ GIT_BRANCH ?= $(git rev-parse --abbrev-ref HEAD)
 
 .PHONY: create-ecr
 create-ecr:
-	aws ecr describe-repositories --repository-names ${PROJECT_NAMR} || aws ecr create-repository --repository-name ${PROJECT_NAME}
+	aws ecr describe-repositories --repository-names ${PROJECT_NAME} || \
+		aws ecr create-repository --repository-name ${PROJECT_NAME}
 
 .PHONY: docker-build
 docker-build:
