@@ -17,6 +17,7 @@ ecr-createrepo:
 .PHONY: ecr-uri
 ecr-uri:
 	@aws --region $(AWS_REGION) ecr describe-repositories \
+		--output text \
 		--repository-names $(SERVICE_NAME) \
 		--query 'repositories[0].repositoryUri'
 
