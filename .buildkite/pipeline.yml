@@ -30,3 +30,4 @@ steps:
 
 env:
     SERVICE_NAME: smctest
+    AWS_REGION: eu-west-2
