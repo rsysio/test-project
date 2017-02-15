@@ -1,8 +1,8 @@
 SHELL := /bin/bash
 SERVICE_NAME ?= test-project
-AWS_REGION ?= eu-west-2
-GIT_HASH ?= $(shell git rev-parse HEAD)
-GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
+AWS_REGION := eu-west-2
+GIT_HASH := $(shell git rev-parse HEAD)
+GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DOCKER_LOGIN ?= $(shell aws --region $(AWS_REGION) ecr get-login)
 
 .PHONY: bk-create-ecr
