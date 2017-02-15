@@ -4,8 +4,8 @@ steps:
       agents:
         queue: default
       command: |
-          make bk-create-ecr
-          make bk-get-ecr-login | buildkite-agent meta-data set "DOCKER_REPO"
+          make create-ecr-repo
+          make get-ecr-login | buildkite-agent meta-data set "DOCKER_REPO"
 
     - wait
 

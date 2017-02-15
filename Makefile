@@ -5,16 +5,16 @@ GIT_HASH := $(shell git rev-parse HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DOCKER_LOGIN ?= $(shell aws --region $(AWS_REGION) ecr get-login)
 
-.PHONY: bk-create-ecr
-bk-create-ecr:
+.PHONY: create-ecr-repo
+create-ecr-repo:
 	aws --region ${AWS_REGION} ecr describe-repositories \
 		--repository-names ${SERVICE_NAME} \
-		|&  grep RepositoryNotFoundException &> /dev/null && \
+		|&  grep RepositoryNotFoundException && \
 		aws --region ${AWS_REGION} ecr create-repository \
 		--repository-name ${SERVICE_NAME}
 
-.PHONY: bk-get-ecr-login
-bk-get-ecr-login:
+.PHONY: get-ecr-login
+get-ecr-login:
 	aws --region ${AWS_REGION} ecr describe-repositories \
 		--repository-names ${SERVICE_NAME} \
 		--query 'repositories[0].repositoryUri'
