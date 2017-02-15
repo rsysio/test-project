@@ -8,11 +8,11 @@ steps:
             --repository-names ${SERVICE_NAME} \
             |&  grep RepositoryNotFoundException &> /dev/null && \
             aws --region ${AWS_REGION} ecr create-repository \
-            --repository-name ${SERVICE_NAME} && sleep 2
-          DOCKER_REPO=$(aws --region ${AWS_REGION} ecr describe-repositories \
-            --repository-names ${SERVICE_NAME} \
-            --query 'repositories[0].repositoryUri')
-          buildkite-agent meta-data set DOCKER_REPO ${DOCKER_REPO}
+            --repository-name ${SERVICE_NAME}
+#          DOCKER_REPO=$(aws --region ${AWS_REGION} ecr describe-repositories \
+#            --repository-names ${SERVICE_NAME} \
+#            --query 'repositories[0].repositoryUri')
+#          buildkite-agent meta-data set DOCKER_REPO ${DOCKER_REPO}
 
     - wait
 
