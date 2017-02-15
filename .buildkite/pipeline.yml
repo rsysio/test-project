@@ -2,7 +2,7 @@ steps:
 
     - label: 'Create AWS ECR repo'
       agents:
-        queue: default
+          queue: default
       command: |
           make ecr-createrepo
 
@@ -10,9 +10,9 @@ steps:
 
     - label: ':hammer: Build & Publish'
       agents:
-        queue: default
+          queue: default
       command: |
-          #make docker-build
+          make docker-build
           eval $(make ecr-login)
           DOCKER_TAG=latest \
           make docker-push
@@ -23,5 +23,12 @@ steps:
           DOCKER_TAG=${BUILDKITE_COMMIT} \
           make docker-push
 
+    - wait
+
+
+    - label: ':deploy:'
+      agents:
+          queue: default
+      command: echo "hello"
 env:
     SERVICE_NAME: smctest
