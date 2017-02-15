@@ -31,8 +31,7 @@ docker-build:
 
 .PHONY: docker-push
 docker-push:
-	DOCKER_REPO=`make ecr-uri`
-	docker tag $(SERVICE_NAME):latest ${DOCKER_REPO}:${DOCKER_TAG}
+	docker tag $(SERVICE_NAME):latest ${DOCKER_REPO}:${DOCKER_TAG} && \
 	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
 .PHONY: create-ecs-service

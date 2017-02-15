@@ -5,7 +5,8 @@ steps:
         queue: default
       command: |
           make ecr-createrepo
-          make ecr-login | buildkite-agent meta-data set "DOCKER_REPO"
+          make ecr-login | buildkite-agent meta-data set "DOCKER_LOGIN"
+          make ecr-uri | buildkite-agent meta-data set "DOCKER_REPO"
 
     - wait
 
@@ -14,7 +15,8 @@ steps:
         queue: default
       command: |
           make docker-build
-          eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
+          eval $(buildkite-agent meta-data get "DOCKER_LOGIN")
+          DOKCER_REPO=$(buildkite-agent meta-data get "DOCKER_REPO")
           DOCKER_TAG=latest \
           make docker-push
           # push bk no
