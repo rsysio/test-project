@@ -16,7 +16,7 @@ create-ecr-repo:
 
 .PHONY: get-ecr-login
 get-ecr-login:
-	aws --region $(AWS_REGION) ecr describe-repositories \
+	@aws --region $(AWS_REGION) ecr describe-repositories \
 		--repository-names $(SERVICE_NAME) \
 		--query 'repositories[0].repositoryUri'
 
