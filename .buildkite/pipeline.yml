@@ -14,8 +14,9 @@ steps:
       agents:
         queue: default
       command: |
+          echo "print uri"
           buildkite-agent meta-data get "DOCKER_REPO"
-          make docker-build
+          #make docker-build
           eval $(buildkite-agent meta-data get "DOCKER_LOGIN")
           DOKCER_REPO=$(buildkite-agent meta-data get "DOCKER_REPO") \
           DOCKER_TAG=latest \
