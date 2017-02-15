@@ -6,7 +6,7 @@ GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DOCKER_LOGIN ?= $(shell aws --region $(AWS_REGION) ecr get-login)
 
 .PHONY: create-ecr-repo
-create-ecr-repo:
+ecr-createrepo:
 	aws --region $(AWS_REGION) ecr describe-repositories \
 		--repository-names $(SERVICE_NAME) \
 		|&  grep RepositoryNotFoundException && \
@@ -14,11 +14,14 @@ create-ecr-repo:
 		--repository-name $(SERVICE_NAME) || \
 		echo "ECR repo exists"
 
-.PHONY: get-ecr-login
-get-ecr-login:
-	@aws --region $(AWS_REGION) ecr describe-repositories \
+.PHONY: get-ecr-uri
+ecr-uri:
+	aws --region $(AWS_REGION) ecr describe-repositories \
 		--repository-names $(SERVICE_NAME) \
 		--query 'repositories[0].repositoryUri'
+
+ecr-login:
+	@aws --region $(AWS_REGION) ecr get-login
 
 .PHONY: docker-build
 docker-build:
@@ -27,6 +30,7 @@ docker-build:
 
 .PHONY: docker-push
 docker-push:
+	DOCKER_REPO=$$(make ecr-uri)
 	docker tag $(SERVICE_NAME):latest ${DOCKER_REPO}:${DOCKER_TAG}
 	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
