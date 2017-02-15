@@ -4,9 +4,13 @@ steps:
       agents:
         queue: default
       command: |
-          make create-ecr
-          DOCKER_REPO=$(aws ecr describe-repositories \
-            --repository-names ${BUILDKITE_PIPELINE_SLUG} \
+          aws --region ${AWS_REGION} ecr describe-repositories \
+            --repository-names ${SERVICE_NAME} \
+            |&  grep RepositoryNotFoundException &> /dev/null && \
+            aws --region ${AWS_REGION} ecr create-repository \
+            --repository-name ${SERVICE_NAME}
+          DOCKER_REPO=$(aws --region ${AWS_REGION} ecr describe-repositories \
+            --repository-names ${SERVICE_NAME} \
             --query 'repositories[0].repositoryUri')
           buildkite-agent meta-data set DOCKER_REPO ${DOCKER_REPO}
 
@@ -17,15 +21,18 @@ steps:
         queue: default
       command: |
           make docker-build
-          export DOCKER_REPO=$(buildkite-agent meta-data get "DOCKER_REPO")
           # push latest
           export DOCKER_TAG=latest
+          eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
           make docker-push
           # push bk no
           export DOCKER_TAG=${BUILDKITE_BUILD_NUMBER}
+          eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
           make docker-push
           # push git hash
           export DOCKER_TAG=${BUILDKITE_COMMIT}
+          eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
           make docker-push
 
-
+env:
+    SERVICE_NAME: smctest
