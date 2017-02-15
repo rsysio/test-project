@@ -32,6 +32,7 @@ docker-build:
 
 .PHONY: docker-push
 docker-push:
+	echo $(DOCKER_REPO)
 	docker tag $(SERVICE_NAME):latest ${DOCKER_REPO}:${DOCKER_TAG} && \
 	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
