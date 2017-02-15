@@ -15,15 +15,15 @@ steps:
       command: |
           make docker-build
           # push latest
-          export DOCKER_TAG=latest \
+          export DOCKER_TAG=latest; \
           eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
           make docker-push
           # push bk no
-          export DOCKER_TAG=${BUILDKITE_BUILD_NUMBER} \
+          export DOCKER_TAG=${BUILDKITE_BUILD_NUMBER}; \
           eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
           make docker-push
           # push git hash
-          export DOCKER_TAG=${BUILDKITE_COMMIT} \
+          export DOCKER_TAG=${BUILDKITE_COMMIT}; \
           eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
           make docker-push
 
