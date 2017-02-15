@@ -14,17 +14,14 @@ steps:
         queue: default
       command: |
           make docker-build
-          # push latest
-          export DOCKER_TAG=latest; \
           eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
+          DOCKER_TAG=latest \
           make docker-push
           # push bk no
-          export DOCKER_TAG=${BUILDKITE_BUILD_NUMBER}; \
-          eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
+          DOCKER_TAG=${BUILDKITE_BUILD_NUMBER} \
           make docker-push
           # push git hash
-          export DOCKER_TAG=${BUILDKITE_COMMIT}; \
-          eval $(buildkite-agent meta-data get "DOCKER_REPO") && \
+          DOCKER_TAG=${BUILDKITE_COMMIT} \
           make docker-push
 
 env:
