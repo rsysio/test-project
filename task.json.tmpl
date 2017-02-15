@@ -1,0 +1,27 @@
+{
+    "family" : "smctest",
+    "containerDefinitions" : [
+        {
+            "name" : "smctest",
+            "image" : "<DOCKER_IMAGE>",
+            "cpu" : 1,
+            "memory" : 512,
+            "memoryReservation" : 0,
+            "portMappings" : [
+                {
+                    "containerPort" : 9000,
+                    "protocol" : "tcp"
+                }
+            ],
+            "essential" : true,
+            "logConfiguration" : {
+                "logDriver" : "awslogs",
+                "options" : {
+                    "awslogs-group" : "docker-logs",
+                    "awslogs-region" : "eu-west-2",
+                    "awslogs-stream-prefix" : "smctest"
+                }
+            }
+        }
+    ]
+}
