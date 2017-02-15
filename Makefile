@@ -31,7 +31,7 @@ docker-build:
 	cd target/docker/stage && docker build -t $(SERVICE_NAME) .
 
 .PHONY: docker-push
-docker-push: DOCKER_REPO := $(shell make ecr-uri)
+docker-push: DOCKER_REPO = $(shell make ecr-uri)
 docker-push:
 	docker tag $(SERVICE_NAME):latest $(DOCKER_REPO):${DOCKER_TAG} && \
 	docker push $(DOCKER_REPO):${DOCKER_TAG}
