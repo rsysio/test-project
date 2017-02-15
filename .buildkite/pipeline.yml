@@ -1,6 +1,6 @@
 steps:
 
-    - label: ':docker:'
+    - label: ':ecs:'
       agents:
           queue: default
       command: |
@@ -8,7 +8,7 @@ steps:
 
     - wait
 
-    - label: ':hammer: Build & Publish'
+    - label: ':docker: :hammer:'
       agents:
           queue: default
       command: |
@@ -25,11 +25,11 @@ steps:
 
     - wait
 
-    - label: ':deploy:'
+    - label: ':rocket:'
       agents:
           queue: default
       command: |
-          sed "s/<DOCKER_IMAGE>/$(make ecr-uri):${BUILDKITE_BUILD_NUMBER}/g" task.json.tmpl > task.json
+          sed -e "s/<DOCKER_IMAGE>/$(make ecr-uri):${BUILDKITE_BUILD_NUMBER}/g" task.json.tmpl > task.json
           make ecs-createtask
 env:
     SERVICE_NAME: smctest
