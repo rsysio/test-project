@@ -7,16 +7,16 @@ DOCKER_LOGIN ?= $(shell aws --region $(AWS_REGION) ecr get-login)
 
 .PHONY: create-ecr-repo
 create-ecr-repo:
-	aws --region ${AWS_REGION} ecr describe-repositories \
-		--repository-names ${SERVICE_NAME} \
+	aws --region $(AWS_REGION) ecr describe-repositories \
+		--repository-names $(SERVICE_NAME) \
 		|&  grep RepositoryNotFoundException && \
-		aws --region ${AWS_REGION} ecr create-repository \
-		--repository-name ${SERVICE_NAME}
+		aws --region $(AWS_REGION) ecr create-repository \
+		--repository-name $(SERVICE_NAME)
 
 .PHONY: get-ecr-login
 get-ecr-login:
-	aws --region ${AWS_REGION} ecr describe-repositories \
-		--repository-names ${SERVICE_NAME} \
+	aws --region $(AWS_REGION) ecr describe-repositories \
+		--repository-names $(SERVICE_NAME) \
 		--query 'repositories[0].repositoryUri'
 
 .PHONY: docker-build
