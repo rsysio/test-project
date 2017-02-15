@@ -11,7 +11,8 @@ create-ecr-repo:
 		--repository-names $(SERVICE_NAME) \
 		|&  grep RepositoryNotFoundException && \
 		aws --region $(AWS_REGION) ecr create-repository \
-		--repository-name $(SERVICE_NAME)
+		--repository-name $(SERVICE_NAME) || \
+		echo "ECR repo exists"
 
 .PHONY: get-ecr-login
 get-ecr-login:
