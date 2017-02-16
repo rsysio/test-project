@@ -31,6 +31,14 @@ ecs-getrevision:
 		--task-definition $(SERVICE_NAME) \
 		--query 'taskDefinition.revision'
 
+.PHONY: ecs-getcount
+ecs-getcount:
+	@aws --region $(AWS_REGION) \
+		ecs describe-services \
+		--cluster ${TARGET_ENV}-ecs \
+		--services $(SERVICE_NAME) \
+		--query 'services[0].runningCount'
+
 .PHONY: ecs-updateservice
 ecs-updateservice:
 	aws --region $(AWS_REGION) \
@@ -38,7 +46,7 @@ ecs-updateservice:
 		--cluster ${TARGET_ENV}-ecs \
 		--service $(SERVICE_NAME) \
 		--task-definition $(SERVICE_NAME):${TASKREV} \
-		--desired-count 1
+		--desired-count ${SVCNT}
 
 .PHONY: docker-build
 docker-build:
