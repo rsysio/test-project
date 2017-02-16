@@ -17,7 +17,7 @@ steps:
 
     - wait
 
-    - label: ':box:'
+    - label: ':package:'
       agents:
           queue: default
       command: |
