@@ -1,8 +1,6 @@
 steps:
 
     - label: ':docker: :hammer:'
-      agents:
-          queue: default
       command: |
           make docker-build
           make ecr-login
@@ -14,12 +12,12 @@ steps:
           # push git hash
           DOCKER_TAG=${BUILDKITE_COMMIT} \
           make docker-push
+      agents:
+          queue: default
 
     - wait
 
     - label: ':package:'
-      agents:
-          queue: default
       command: |
           DOCKER_IMAGE=$(make ecr-uri):${BUILDKITE_BUILD_NUMBER} \
           make ecs-createtask
@@ -27,17 +25,20 @@ steps:
           make ecs-getcount | buildkite-agent meta-data set "ecsservicecount"
       env:
           TARGET_ENV: qa
+      agents:
+          queue: default
 
     - wait
 
     - label: ':ecs::rocket:'
-      agents:
-          queue: default
       command: |
           SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
           TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
           make ecs-updateservice
       env:
           TARGET_ENV: qa
+      agents:
+          queue: default
+
 env:
     SERVICE_NAME: smctest
