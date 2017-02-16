@@ -1,13 +1,5 @@
 steps:
 
-    - label: ':ecs:'
-      agents:
-          queue: default
-      command: |
-          make ecr-createrepo
-
-    - wait
-
     - label: ':docker: :hammer:'
       agents:
           queue: default
@@ -31,5 +23,15 @@ steps:
       command: |
           DOCKER_IMAGE=$(make ecr-uri):${BUILDKITE_BUILD_NUMBER} \
           make ecs-createtask
+
+    - wait
+
+    - label: ':ecs:'
+      agents:
+          queue: default
+      command: |
+          make ecs-updateservice
+      env:
+          TARGET_ENV: qa
 env:
     SERVICE_NAME: smctest

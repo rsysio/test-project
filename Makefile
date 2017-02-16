@@ -5,16 +5,6 @@ GIT_HASH := $(shell git rev-parse HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DOCKER_LOGIN ?= $(shell aws --region $(AWS_REGION) ecr get-login)
 
-.PHONY: ecr-createrepo
-ecr-createrepo:
-	aws --region $(AWS_REGION) \
-		ecr describe-repositories \
-		--repository-names $(SERVICE_NAME) \
-		|&  grep RepositoryNotFoundException && \
-		aws --region $(AWS_REGION) ecr create-repository \
-		--repository-name $(SERVICE_NAME) || \
-		echo "ECR repo exists"
-
 .PHONY: ecr-uri
 ecr-uri:
 	@aws --region $(AWS_REGION) \
@@ -34,12 +24,18 @@ ecs-createtask:
 		ecs register-task-definition \
 		--cli-input-json file://task.json
 
-.PHONY: ecs-createservice
-ecs-createservice:
+.PHONY: ecs-updateservice
+ecs-updateservice:
+	REV=$$(aws --region $(AWS_REGION) \
+		ecs describe-task-definition \
+		--task-definition $(SERVICE_NAME) \
+		--query 'taskDefinition.revision'); \
 	aws --region $(AWS_REGION) \
-		ecs list-services \
-		--cluster ${RUNNING_ENV}-ecs \
-		--output json
+		ecs update-serice \
+		--cluster ${TARGET_ENV}-ecs \
+		--service $(SERVICE_NAME) \
+		--task-definition $(SERVICE_NAME):${REV} \
+		--desired-count 1 \
 
 .PHONY: docker-build
 docker-build:
