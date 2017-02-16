@@ -29,7 +29,7 @@ ecr-login:
 
 .PHONY: ecs-createtask
 ecs-createtask:
-	sed "s/%DOCKER_IMAGE%/${DOCKER_IMAGE}/g" task.json.tmpl > task.json
+	sed "s^%DOCKER_IMAGE%^${DOCKER_IMAGE}^g" task.json.tmpl > task.json
 	aws --region $(AWS_REGION) \
 		ecs register-task-definition \
 		--cli-input-json file://task.json
