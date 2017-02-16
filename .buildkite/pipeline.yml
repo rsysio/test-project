@@ -13,7 +13,7 @@ steps:
           queue: default
       command: |
           make docker-build
-          eval $(make ecr-login)
+          make ecr-login
           DOCKER_TAG=latest \
           make docker-push
           # push bk no

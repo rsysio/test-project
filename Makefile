@@ -25,8 +25,7 @@ ecr-uri:
 
 .PHONY: ecr-login
 ecr-login:
-	@aws --region $(AWS_REGION) \
-		ecr get-login
+	eval $$(aws --region $(AWS_REGION) ecr get-login)
 
 .PHONY: ecs-createtask
 ecs-createtask:
