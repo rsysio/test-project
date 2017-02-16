@@ -23,6 +23,7 @@ steps:
       command: |
           DOCKER_IMAGE=$(make ecr-uri):${BUILDKITE_BUILD_NUMBER} \
           make ecs-createtask
+          make ecs-getrevision | buildkite-agent meta-data set "ecstaskrev"
 
     - wait
 
@@ -30,6 +31,7 @@ steps:
       agents:
           queue: default
       command: |
+          TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
           make ecs-updateservice
       env:
           TARGET_ENV: qa

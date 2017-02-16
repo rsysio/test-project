@@ -24,17 +24,20 @@ ecs-createtask:
 		ecs register-task-definition \
 		--cli-input-json file://task.json
 
-.PHONY: ecs-updateservice
-ecs-updateservice:
-	REV=$$(aws --region $(AWS_REGION) \
+.PHONY: ecs-getrevision
+ecs-getrevision:
+	aws --region $(AWS_REGION) \
 		ecs describe-task-definition \
 		--task-definition $(SERVICE_NAME) \
-		--query 'taskDefinition.revision'); \
+		--query 'taskDefinition.revision'
+
+.PHONY: ecs-updateservice
+ecs-updateservice:
 	aws --region $(AWS_REGION) \
 		ecs update-service \
 		--cluster ${TARGET_ENV}-ecs \
 		--service $(SERVICE_NAME) \
-		--task-definition $(SERVICE_NAME):${REV} \
+		--task-definition $(SERVICE_NAME):${TASKREV} \
 		--desired-count 1
 
 .PHONY: docker-build
