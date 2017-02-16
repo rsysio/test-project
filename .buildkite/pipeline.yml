@@ -29,7 +29,7 @@ steps:
       agents:
           queue: default
       command: |
-          sed \"s/%DOCKER_IMAGE%/$(make ecr-uri):${BUILDKITE_BUILD_NUMBER}/g\" task.json.tmpl > task.json
+          DOCKER_IMAGE=$(make ecr-uri):${BUILDKITE_BUILD_NUMBER} \
           make ecs-createtask
 env:
     SERVICE_NAME: smctest
