@@ -31,11 +31,11 @@ ecs-updateservice:
 		--task-definition $(SERVICE_NAME) \
 		--query 'taskDefinition.revision'); \
 	aws --region $(AWS_REGION) \
-		ecs update-serice \
+		ecs update-service \
 		--cluster ${TARGET_ENV}-ecs \
 		--service $(SERVICE_NAME) \
 		--task-definition $(SERVICE_NAME):${REV} \
-		--desired-count 1 \
+		--desired-count 1
 
 .PHONY: docker-build
 docker-build:
