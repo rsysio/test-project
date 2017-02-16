@@ -43,6 +43,7 @@ ecs-createservice:
 
 .PHONY: docker-build
 docker-build:
+	sed "s^%PLACEHOLDER%^$$(date)^g" testPage.scala.html > app/views/testPage.scala.html
 	docker run -it --rm -v ${PWD}:/app -v "${HOME}/.ivy2":/root/.ivy2 1science/sbt sbt docker:stage
 	cd target/docker/stage && docker build -t $(SERVICE_NAME) .
 
