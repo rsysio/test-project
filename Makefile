@@ -26,7 +26,7 @@ ecs-createtask:
 
 .PHONY: ecs-getrevision
 ecs-getrevision:
-	aws --region $(AWS_REGION) \
+	@aws --region $(AWS_REGION) \
 		ecs describe-task-definition \
 		--task-definition $(SERVICE_NAME) \
 		--query 'taskDefinition.revision'
