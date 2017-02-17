@@ -75,7 +75,7 @@ steps:
       agents:
           queue: default
 
-    - block: ":rocket: Release!"
+    - block: ":lock:"
 
     - label: ':ecs: ETE :rocket:'
       command: |
