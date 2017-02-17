@@ -21,8 +21,33 @@ steps:
       command: |
           DOCKER_IMAGE=$(make ecr-uri):${BUILDKITE_BUILD_NUMBER} \
           make ecs-createtask
-          make ecs-getrevision | buildkite-agent meta-data set "ecstaskrev"
-          make ecs-getcount | buildkite-agent meta-data set "ecsservicecount"
+      agents:
+          queue: default
+
+    - wait
+
+    - label: ':magnifier:'
+      command: |
+          make ecs-getrevision | buildkite-agent meta-data set "${TARGET_ENV}ecstaskrev"
+          make ecs-getcount | buildkite-agent meta-data set "${TARGET_ENV}ecsservicecount"
+      env:
+          TARGET_ENV: qa
+      agents:
+          queue: default
+    - label: ':magnifier:'
+      command: |
+          make ecs-getrevision | buildkite-agent meta-data set "${TARGET_ENV}ecstaskrev"
+          make ecs-getcount | buildkite-agent meta-data set "${TARGET_ENV}ecsservicecount"
+      env:
+          TARGET_ENV: perf
+      agents:
+          queue: default
+    - label: ':magnifier:'
+      command: |
+          make ecs-getrevision | buildkite-agent meta-data set "${TARGET_ENV}ecstaskrev"
+          make ecs-getcount | buildkite-agent meta-data set "${TARGET_ENV}ecsservicecount"
+      env:
+          TARGET_ENV: ete
       agents:
           queue: default
 
@@ -30,8 +55,8 @@ steps:
 
     - label: ':ecs: QA :rocket:'
       command: |
-          SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
-          TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
+          SVCNT=$(buildkite-agent meta-data get "${TARGET_ENV}ecsservicecount") \
+          TASKREV=$(buildkite-agent meta-data get "${TARGET_ENV}ecstaskrev") \
           make ecs-updateservice
       env:
           TARGET_ENV: qa
@@ -42,8 +67,8 @@ steps:
 
     - label: ':ecs: PERF :rocket:'
       command: |
-          SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
-          TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
+          SVCNT=$(buildkite-agent meta-data get "${TARGET_ENV}ecsservicecount") \
+          TASKREV=$(buildkite-agent meta-data get "${TARGET_ENV}ecstaskrev") \
           make ecs-updateservice
       env:
           TARGET_ENV: perf
@@ -54,8 +79,8 @@ steps:
 
     - label: ':ecs: ETE :rocket:'
       command: |
-          SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
-          TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
+          SVCNT=$(buildkite-agent meta-data get "${TARGET_ENV}ecsservicecount") \
+          TASKREV=$(buildkite-agent meta-data get "${TARGET_ENV}ecstaskrev") \
           make ecs-updateservice
       env:
           TARGET_ENV: ete
