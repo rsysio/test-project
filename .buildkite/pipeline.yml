@@ -23,14 +23,12 @@ steps:
           make ecs-createtask
           make ecs-getrevision | buildkite-agent meta-data set "ecstaskrev"
           make ecs-getcount | buildkite-agent meta-data set "ecsservicecount"
-      env:
-          TARGET_ENV: qa
       agents:
           queue: default
 
     - wait
 
-    - label: ':ecs::rocket:'
+    - label: ':ecs: QA :rocket:'
       command: |
           SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
           TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
@@ -39,6 +37,32 @@ steps:
           TARGET_ENV: qa
       agents:
           queue: default
+
+    - wait
+
+    - label: ':ecs: PERF :rocket:'
+      command: |
+          SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
+          TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
+          make ecs-updateservice
+      env:
+          TARGET_ENV: perf
+      agents:
+          queue: default
+
+    - block: ":rocket: Release!"
+
+    - label: ':ecs: ETE :rocket:'
+      command: |
+          SVCNT=$(buildkite-agent meta-data get "ecsservicecount") \
+          TASKREV=$(buildkite-agent meta-data get "ecstaskrev") \
+          make ecs-updateservice
+      env:
+          TARGET_ENV: ete
+      agents:
+          queue: default
+
+
 
 env:
     SERVICE_NAME: smctest
