@@ -13,7 +13,7 @@ steps:
           DOCKER_TAG=${BUILDKITE_COMMIT} \
           make docker-push
       agents:
-          queue: default
+          queue: qa
 
     - wait
 
@@ -22,7 +22,7 @@ steps:
           DOCKER_IMAGE=$(make ecr-uri):${BUILDKITE_BUILD_NUMBER} \
           make ecs-createtask
       agents:
-          queue: default
+          queue: qa
 
     - wait
 
@@ -33,7 +33,7 @@ steps:
       env:
           TARGET_ENV: qa
       agents:
-          queue: default
+          queue: qa
     - label: ':mag_right:'
       command: |
           make ecs-getrevision | buildkite-agent meta-data set "${TARGET_ENV}ecstaskrev"
@@ -41,7 +41,7 @@ steps:
       env:
           TARGET_ENV: perf
       agents:
-          queue: default
+          queue: qa
     - label: ':mag_right:'
       command: |
           make ecs-getrevision | buildkite-agent meta-data set "${TARGET_ENV}ecstaskrev"
@@ -49,7 +49,7 @@ steps:
       env:
           TARGET_ENV: ete
       agents:
-          queue: default
+          queue: qa
 
     - wait
 
@@ -61,7 +61,7 @@ steps:
       env:
           TARGET_ENV: qa
       agents:
-          queue: default
+          queue: qa
 
     - wait
 
@@ -73,7 +73,7 @@ steps:
       env:
           TARGET_ENV: perf
       agents:
-          queue: default
+          queue: qa
 
     - block: ":lock:"
 
@@ -85,7 +85,7 @@ steps:
       env:
           TARGET_ENV: ete
       agents:
-          queue: default
+          queue: qa
 
 
 
